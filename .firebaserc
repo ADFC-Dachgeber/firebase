@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "adfc-staging": {
+      "hosting": {
+        "dg-firebase": [
+          "adfc-staging"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "adfc-staging"
+  }
+}
