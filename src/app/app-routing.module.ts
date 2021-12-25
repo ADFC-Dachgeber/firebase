@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { hasCustomClaim, redirectLoggedInTo, redirectUnauthorizedTo, canActivate, AngularFireAuthGuard } from '@angular/fire/compat/auth-guard';
+import { redirectUnauthorizedTo, canActivate } from '@angular/fire/auth-guard';
 
 import { PATH_LOGIN, PATH_MAP, PATH_NOT_FOUND } from './constants';
 import { LoginComponent } from './login/login.component';
@@ -15,8 +15,7 @@ export const routes: Routes = [
   {
     path: PATH_MAP,
     component: MapComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    ...canActivate(redirectUnauthorizedToLogin),
   },
   { path: PATH_LOGIN, component: LoginComponent },
   { path: '', redirectTo: PATH_MAP, pathMatch: 'full' },
