@@ -13,6 +13,7 @@ export const environment = {
     authDomain: 'adfc-staging.firebaseapp.com',
     messagingSenderId: '714822540529',
   },
+  useEmulators: true,
   production: false
 };
 
