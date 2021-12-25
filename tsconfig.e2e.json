@@ -3,19 +3,16 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
+    "sourceMap": true,
     "types": [
-      "jasmine"
+      "jasmine",
     ]
   },
   "files": [
-    "src/test.ts",
     "src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/tests/**/*.e2e-spec.ts",
+    "src/tests/**/*.d.ts"
   ],
-  "exclude": [
-    "src/tests/**/*.ts"
-  ]
 }
