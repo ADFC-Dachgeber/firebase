@@ -1,1 +1,11 @@
-<p id="login-message">Anmelden mit</p>
+<h1 id="login-message">Anmeldung</h1>
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
+    <mat-form-field>
+        <input matInput id="email-login-input" type="email" formControlName="email" placeholder="EMail">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="password-login-input" type="password" formControlName="password" placeholder="Kennwort">
+    </mat-form-field>
+    <button mat-stroked-button id="submit-login-button" type="submit" [disabled]="!loginForm.valid">Anmelden</button>
+</form>

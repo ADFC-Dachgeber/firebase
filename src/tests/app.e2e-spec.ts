@@ -1,8 +1,20 @@
-describe('Use can login.', function () {
+describe('User can login with email/password.', function () {
     it('should show login screen', async () => {
         browser.get('/login');
         const loginMessage = element(by.id('login-message'));
-        expect(loginMessage.getText()).toEqual('Anmelden mit');
+        expect(loginMessage.getText()).toEqual('Anmeldung');
+        const emailInput = element(by.id('email-login-input'));
+        expect(emailInput.getAttribute('placeholder'))
+            .toEqual('');
+        const passwordInput = element(by.id('password-login-input'));
+        expect(passwordInput.getAttribute('value'))
+            .toEqual('');
+
+        emailInput.sendKeys("max@mustermann.de");
+        passwordInput.sendKeys("kennwort");
+        element(by.id('submit-login-button')).click();
+
+        expect(browser.getCurrentUrl()).toContain('map');
     });
 });
 

@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { getAuth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+
+import { Message } from '../message';
+import { PATH_MAP } from '../constants';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +13,36 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
+  loginForm: FormGroup = new FormGroup({
+    email: new FormControl(
+      '',
+      [
+        Validators.required,
+        Validators.email,
+      ]),
+    password: new FormControl(
+      '',
+      [
+        Validators.required,
+      ]),
+  });
 
-  constructor() { }
+  constructor(
+    private readonly router: Router,
+    private readonly snackbar: MatSnackBar,
+  ) { }
+
+  async onSubmit(loginForm: FormGroup) {
+    const auth = getAuth();
+    const { email, password } = loginForm.value;
+    try {
+      const { user } = (await signInWithEmailAndPassword(auth, email, password));
+      this.router.navigate([PATH_MAP]);
+    } catch (error) {
+      this.snackbar.open(Message.WrongCredentials);
+    }
+  }
 
   ngOnInit(): void {
   }
-
 }

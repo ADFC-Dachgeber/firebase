@@ -12,6 +12,7 @@ import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-confi
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 // import { USE_EMULATOR as USE_DATABASE_EMULATOR } from '@angular/fire/compat/database';
 // import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/compat/firestore';
@@ -22,6 +23,8 @@ import { AppComponent } from './app.component';
 import { MapModule } from './map/map.module';
 import { NotFoundModule } from './not-found/not-found.module';
 import { environment } from '../environments/environment';
+import { LoginModule } from './login/login.module';
+
 
 @NgModule({
   declarations: [
@@ -33,6 +36,7 @@ import { environment } from '../environments/environment';
     MatToolbarModule,
     MapModule,
     NotFoundModule,
+    LoginModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),
@@ -42,15 +46,19 @@ import { environment } from '../environments/environment';
     providePerformance(() => getPerformance()),
     provideRemoteConfig(() => getRemoteConfig()),
     provideStorage(() => getStorage()),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     ScreenTrackingService,
     UserTrackingService,
     {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 3000 }
+    },
+    {
       provide: USE_AUTH_EMULATOR,
       useValue: environment.useEmulators ?
-        ['localhost', 9099] : undefined
+        ['http://localhost:9099'] : undefined
     },
   ],
   bootstrap: [AppComponent]
