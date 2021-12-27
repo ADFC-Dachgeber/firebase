@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { getAuth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -40,6 +40,16 @@ export class LoginComponent implements OnInit {
       this.router.navigate([PATH_MAP]);
     } catch (error) {
       this.snackbar.open(Message.WrongCredentials);
+    }
+  }
+
+  async onLoginWithGoogle() {
+    const auth = getAuth();
+    try {
+      const { user } = await signInWithPopup(auth, new GoogleAuthProvider());
+      this.router.navigate([PATH_MAP]);
+    } catch (error) {
+      this.snackbar.open(Message.LoginFailed);
     }
   }
 

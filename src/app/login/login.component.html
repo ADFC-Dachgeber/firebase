@@ -9,3 +9,12 @@
     </mat-form-field>
     <button mat-stroked-button id="submit-login-button" type="submit" [disabled]="!loginForm.valid">Anmelden</button>
 </form>
+
+<p>
+    Oder anmelden mit
+</p>
+
+<div id="oauth-login">
+    <button id="login-with-google-button" mat-stroked-button (click)="onLoginWithGoogle()">Google</button>
+    <!-- <button mat-stroked-button>Facebook</button> -->
+</div>
