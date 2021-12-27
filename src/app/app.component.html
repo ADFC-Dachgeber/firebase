@@ -1,6 +1,14 @@
 <body>
   <mat-toolbar>
     <span id="app-title">{{title}}</span>
+    <span class="example-spacer"></span>
+    <span *ngIf="$user | async as user">
+      <img id="profile-pic" [src]="user.photoURL" />
+      {{user.displayName}}
+    </span>
+    <button *ngIf="$user | async" id="logout-button" mat-button (click)="logout()">
+      <mat-icon aria-hidden="false" aria-label="Abmelden">exit_to_app</mat-icon>
+    </button>
   </mat-toolbar>
   <router-outlet></router-outlet>
 </body>

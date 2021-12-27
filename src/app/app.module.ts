@@ -13,6 +13,7 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 // import { USE_EMULATOR as USE_DATABASE_EMULATOR } from '@angular/fire/compat/database';
 // import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/compat/firestore';
@@ -33,6 +34,7 @@ import { LoginModule } from './login/login.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatIconModule,
     MatToolbarModule,
     MapModule,
     NotFoundModule,
