@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { redirectUnauthorizedTo, canActivate } from '@angular/fire/auth-guard';
+import { canActivate, customClaims } from '@angular/fire/auth-guard';
+import { map, pipe } from 'rxjs';
 
 import { PATH_LOGIN, PATH_MAP, PATH_NOT_FOUND } from './constants';
 import { LoginComponent } from './login/login.component';
 import { MapComponent } from './map/map.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(PATH_LOGIN);
+const approvedOnly = () => pipe(
+  customClaims,
+  map(({ approved }) => approved || [PATH_LOGIN]),
+);
+
 // const redirectLoggedInToItems = () => redirectLoggedInTo(['items']);
 // const belongsToAccount = (next: any) => hasCustomClaim(`account-${next.params.id}`);
 
@@ -15,7 +20,8 @@ export const routes: Routes = [
   {
     path: PATH_MAP,
     component: MapComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    // @ts-ignore: Type check freaks out here otherwise.
+    ...canActivate(approvedOnly),
   },
   { path: PATH_LOGIN, component: LoginComponent },
   { path: '', redirectTo: PATH_MAP, pathMatch: 'full' },
