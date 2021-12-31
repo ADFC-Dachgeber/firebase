@@ -5,4 +5,5 @@ export interface Dachgeber {
     names: ReadonlyArray<string>;
     coordinate: Coordinate;
     description: string;
+    emails: ReadonlyArray<string>;
 }
