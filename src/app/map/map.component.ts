@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ɵɵsetComponentScope } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Overlay } from 'ol';
 import { Map, View } from 'ol';
 import { fromLonLat } from 'ol/proj';
@@ -18,8 +18,11 @@ import { GeoJSONFeature, GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.less']
 })
-export class MapComponent implements AfterContentInit {
+export class MapComponent implements AfterContentInit, OnInit {
   dachgebers$: Observable<Dachgeber[]>;
+  vectorSource: VectorSource<any> = new VectorSource({
+    features: [],
+  });
 
   constructor(
     private readonly dachgeberService: DachgeberService,
@@ -27,11 +30,22 @@ export class MapComponent implements AfterContentInit {
     this.dachgebers$ = this.dachgeberService.dachgebers$
   }
 
-  ngAfterContentInit(): void {
-    this.dachgebers$.subscribe(this.render);
+  ngOnInit() {
+    this.dachgebers$.subscribe(dachgebers => {
+      const features = new GeoJSON()
+        .readFeatures(
+          JSON.stringify(dgsToGeoJSON(dachgebers))
+        );
+      this.vectorSource.clear();
+      this.vectorSource.addFeatures(features);
+    });
   }
 
-  render(dachgebers: Dachgeber[]): void {
+  async ngAfterContentInit(): Promise<void> {
+    this.render();
+  }
+
+  render(): void {
     const container = document.getElementById('popup')!;
     const content = document.getElementById('popup-content')!;
     const closer = document.getElementById('popup-closer')!;
@@ -51,18 +65,9 @@ export class MapComponent implements AfterContentInit {
       closer.blur();
       return false;
     };
-    const features = new GeoJSON()
-      .readFeatures(
-        JSON.stringify(dgsToGeoJSON(dachgebers))
-      );
     const clusterSource = new ClusterSource({
       distance: 40,
-      source: new VectorSource({
-        features,
-        format: new GeoJSON({
-          featureProjection: 'EPSG:3857'
-        }),
-      }),
+      source: this.vectorSource,
     });
     const styleCache: { [key: number]: any } = {};
     const vectorLayer = new VectorLayer({
