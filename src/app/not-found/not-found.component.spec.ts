@@ -27,6 +27,6 @@ describe('NotFoundComponent', () => {
     const fixture = TestBed.createComponent(NotFoundComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('p')?.textContent).toContain('Misst, nicht gefunden.');
+    expect(compiled.querySelector('p')?.textContent).toContain('Mist, nicht gefunden.');
   });
 });
