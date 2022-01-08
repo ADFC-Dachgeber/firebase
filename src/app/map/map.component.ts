@@ -1,6 +1,5 @@
-import { AfterContentInit, Component, OnInit } from '@angular/core';
-import { Overlay } from 'ol';
-import { Map, View } from 'ol';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Map, Overlay, View } from 'ol';
 import { fromLonLat } from 'ol/proj';
 import TileLayer from 'ol/layer/Tile';
 import { OSM, Vector as VectorSource, Cluster as ClusterSource } from 'ol/source';
@@ -19,7 +18,7 @@ import { DachgeberDecoratorService } from '../decorators/dachgeber-decorator.ser
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.less']
 })
-export class MapComponent implements AfterContentInit, OnInit {
+export class MapComponent implements OnInit, AfterViewInit {
   dachgebers$: Observable<Dachgeber[]>;
   vectorSource: VectorSource<any> = new VectorSource({
     features: [],
@@ -43,30 +42,14 @@ export class MapComponent implements AfterContentInit, OnInit {
     });
   }
 
-  async ngAfterContentInit(): Promise<void> {
+  async ngAfterViewInit(): Promise<void> {
     this.render();
   }
 
   render(): void {
-    const container = document.getElementById('popup')!;
-    const content = document.getElementById('popup-content')!;
-    const closer = document.getElementById('popup-closer')!;
+    const sideNav = document.getElementById('map-sidenav')!;
+    const pointer = document.getElementById('pointer')!;
 
-    /**
-    * Create an overlay to anchor the popup to the map.
-    */
-    const overlay = new Overlay({
-      element: container,
-      autoPan: true,
-      autoPanAnimation: {
-        duration: 250
-      }
-    });
-    closer.onclick = function () {
-      overlay.setPosition(undefined);
-      closer.blur();
-      return false;
-    };
     const clusterSource = new ClusterSource({
       distance: 40,
       source: this.vectorSource,
@@ -81,7 +64,7 @@ export class MapComponent implements AfterContentInit, OnInit {
         if (!style) {
           style = new Style({
             image: new Icon({
-              src: '/assets/images/dg-icon.bmp'
+              src: '/assets/images/dg-icon.bmp',
             }),
             text: new Text({
               text: size.toString(),
@@ -103,11 +86,20 @@ export class MapComponent implements AfterContentInit, OnInit {
       center: fromLonLat([10.4541194, 51.1642292,]),
       zoom: 6,
       projection: 'EPSG:3857', // default projection is EPSG:3857
-    })
+    });
+
+    const pointerOverlay = new Overlay({
+      element: pointer,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
+
 
     const map = new Map({
       target: 'map',
-      overlays: [overlay],
+      overlays: [pointerOverlay],
       layers: [
         new TileLayer({
           source: new OSM(),
@@ -118,19 +110,18 @@ export class MapComponent implements AfterContentInit, OnInit {
     });
 
     map.on('click', evt => {
-      const coordinate = evt.coordinate;
       const features =
         map.getFeaturesAtPixel(evt.pixel, { hitTolerance: 10 });
 
       if (features.length > 0) {
+        // const coordinate = evt.coordinate;
+        // pointerOverlay.setPosition(coordinate);
         const dachgeber =
           fromFeature(features[0].get('features')[0]);
-        content.innerHTML =
+        sideNav.innerHTML =
           this.dachgeberDecoratorService.decorate(dachgeber);
-        overlay.setPosition(coordinate);
-        container.removeAttribute('class')
       } else {
-        container.setAttribute('class', 'hidden');
+        sideNav.innerHTML = '';
       }
     });
   }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapComponent } from './map.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 
@@ -9,7 +10,8 @@ import { MapComponent } from './map.component';
     MapComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatSidenavModule,
   ]
 })
 export class MapModule { }
