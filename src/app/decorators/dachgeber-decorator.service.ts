@@ -11,7 +11,8 @@ export class DachgeberDecoratorService {
       expandAbbreviations(dachgeber.description);
     return `<p>${dachgeber.names.join(' & ')}</p>` +
       `<p>${expandedDescription}</p>` +
-      'EMail: ' + dachgeber.emails.map(email => `<a href="mailto:${email}">${email}</a>`).join(' & ');
+      '<p>EMail: ' + dachgeber.emails.map(email => `<a href="mailto:${email}">${email}</a>`).join(' & ') + '</p>' +
+      '<p>Tel: ' + dachgeber.telephones.map(tel => `<a href="tel:${tel}">${tel}</a>`).join(' & ') + '</p>';
   }
 }
 

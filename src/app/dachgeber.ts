@@ -10,6 +10,7 @@ export interface Dachgeber {
     coordinate: Coordinate;
     description: string;
     emails: ReadonlyArray<string>;
+    telephones: ReadonlyArray<string>;
 }
 
 export function fromFeature(feature: Feature<Point>): Dachgeber {
@@ -19,6 +20,7 @@ export function fromFeature(feature: Feature<Point>): Dachgeber {
         emails: feature.get('emails'),
         coordinate: feature.getGeometry()!.getCoordinates(),
         description: feature.get('description'),
+        telephones: feature.get('telephones'),
     } as Dachgeber;
 }
 
@@ -30,6 +32,7 @@ export function toGeoJSONFeature(dachgeber: Dachgeber): GeoJSONFeature {
             names: dachgeber.names,
             emails: dachgeber.emails,
             description: dachgeber.description,
+            telephones: dachgeber.telephones,
         },
         geometry: {
             type: 'Point',
