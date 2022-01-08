@@ -1,0 +1,36 @@
+import { TestBed } from '@angular/core/testing';
+import { Dachgeber } from '../dachgeber';
+
+import { DachgeberDecoratorService } from './dachgeber-decorator.service';
+
+describe('DachgeberDecoratorService', () => {
+  let service: DachgeberDecoratorService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(DachgeberDecoratorService);
+    console.debug(service);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  describe('decorate', () => {
+    it('decorates a dachgeber', () => {
+      const dachgeber: Dachgeber = {
+        uids: ['abc', 'def'],
+        names: ['Max Mustermann', 'Hanna Mustermann'],
+        description: 'Hauptstraße 45, 97941 Tauberbischofsheim, Plaetze: H:4 + G:10, Tel: (01234) 56789, eM: user83@example.com, Anm: z:Max & Hanna; Sp: GB,E,F; KW!; FK; kH; WM; Rep (DG-12345)',
+        emails: ['m.mustermann@example.com', 'h.mustermann@example.com'],
+        coordinate: [123, 456],
+      };
+
+      expect(service.decorate(dachgeber)).toEqual(
+        '<p>Max Mustermann & Hanna Mustermann</p>' +
+        `<p>Hauptstraße 45, 97941 Tauberbischofsheim, Plaetze: Haus:4 + Garten:10, Tel: (01234) 56789, EMail: user83@example.com, Angemeldet: Zusätzliche Person(en):Max & Hanna; Sprache(n): GB,E,F; Kinder willkommen!; Fahrradkeller; keine Hunde bitte; Waschmaschine; Reperaturmöglichkeit (DG-12345)</p>` +
+        'EMail: <a href="mailto:m.mustermann@example.com">m.mustermann@example.com</a> & <a href="mailto:h.mustermann@example.com">h.mustermann@example.com</a>'
+      );
+    });
+  });
+});

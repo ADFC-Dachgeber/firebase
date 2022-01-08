@@ -9,9 +9,10 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Style, Fill, Text, Icon } from 'ol/style';
 import { Observable } from 'rxjs';
 
-import { Dachgeber } from '../dachgeber';
+import { Dachgeber, fromFeature, toGeoJSONFeature } from '../dachgeber';
 import { DachgeberService } from '../dachgeber/dachgeber.service';
-import { GeoJSONFeature, GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
+import { GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
+import { DachgeberDecoratorService } from '../decorators/dachgeber-decorator.service';
 
 @Component({
   selector: 'app-map',
@@ -26,6 +27,7 @@ export class MapComponent implements AfterContentInit, OnInit {
 
   constructor(
     private readonly dachgeberService: DachgeberService,
+    private readonly dachgeberDecoratorService: DachgeberDecoratorService,
   ) {
     this.dachgebers$ = this.dachgeberService.dachgebers$
   }
@@ -117,15 +119,20 @@ export class MapComponent implements AfterContentInit, OnInit {
 
     map.on('click', evt => {
       const coordinate = evt.coordinate;
-      const features = map.getFeaturesAtPixel(evt.pixel, { hitTolerance: 10 });
+      const features =
+        map.getFeaturesAtPixel(evt.pixel, { hitTolerance: 10 });
 
       if (features.length > 0) {
-        const feature = features[0].get('features')[0];
-        content.innerHTML = `
-          <p>${feature.get('names')}</p>
-          <p>${feature.get('description')}</p>
-          <p>${feature.get('emails')}</p>
-        `;
+        const dachgeber =
+          fromFeature(features[0].get('features')[0]);
+        content.innerHTML =
+          this.dachgeberDecoratorService.decorate(dachgeber);
+
+        // content.innerHTML = `
+        //   <p>${dachgeber.get('names')}</p>
+        //   <p>${dachgeber.get('description')}</p>
+        //   <p>${dachgeber.get('emails')}</p>
+        // `;
         overlay.setPosition(coordinate);
         container.removeAttribute('class')
       } else {
@@ -139,21 +146,6 @@ function dgsToGeoJSON(dachgebers: ReadonlyArray<Dachgeber>):
   GeoJSONFeatureCollection {
   return {
     type: 'FeatureCollection',
-    features: dachgebers.map(dgToGeoJSON),
+    features: dachgebers.map(toGeoJSONFeature),
   }
-}
-
-function dgToGeoJSON(dachgeber: Dachgeber): GeoJSONFeature {
-  return {
-    type: 'Feature',
-    properties: {
-      names: dachgeber.names.join('& '),
-      emails: dachgeber.emails.join('& '),
-      description: dachgeber.description,
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: fromLonLat(dachgeber.coordinate),
-    }
-  };
 }
