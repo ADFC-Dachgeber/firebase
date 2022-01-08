@@ -16,23 +16,14 @@ export class DachgeberDecoratorService {
 }
 
 function expandAbbreviations(description: string): string {
-  return description
-    .replace('H:', 'Haus:')
-    .replace('G:', 'Garten:')
-    .replace('eM:', `EMail:`)
-    .replace('Sp:', 'Sprache(n):')
-    .replace('KW!;', 'Kinder willkommen!;')
-    .replace('FK;', 'Fahrradkeller;')
-    .replace('Anm:', 'Angemeldet:')
-    .replace('z:', 'Zusätzliche Person(en):')
-    .replace('kH;', 'keine Hunde bitte;')
-    .replace('WM;', 'Waschmaschine;')
-    .replace('Rep', 'Reperaturmöglichkeit');
+  return REPLACEMENTS
+    .reduce((acc: string, { regex, substitution }) =>
+      acc.replace(new RegExp(regex), substitution), description);
 }
 
-const EMAIL_REGEX = /eM:\ ?(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-
-const DICT = [
+const REPLACEMENTS = [
+  { regex: 'eM:', substitution: 'EMail:' },
+  { regex: 'Anm:', substitution: 'Angemeldet:' },
   { regex: 'AB;', substitution: 'Anrufbeantworter;' },
   { regex: 'akA;', substitution: 'auch kurzfr. Anmeldg. mgl.;' },
   { regex: 'aoF;', substitution: 'auch ohne Fahrrad;' },
@@ -51,6 +42,7 @@ const DICT = [
   },
   { regex: 'GZi;', substitution: 'Gäste-Zimmer;' },
   { regex: 'H:', substitution: 'max. Anzahl Pl. im Haus:' },
+  { regex: 'Rep ', substitution: 'Reperaturmöglichkeit ' },
   { regex: 'HBf;', substitution: 'Hauptbahnhof;' },
   { regex: 'Hdy:', substitution: 'Handy-Telefonnummer:' },
   { regex: 'HG;', substitution: 'Hausgemeinschaft;' },
@@ -63,49 +55,59 @@ const DICT = [
   { regex: 'KB;', substitution: 'Küchenbenutzung;' },
   { regex: 'kDu;', substitution: 'keine Dusche vorhanden;' },
   { regex: 'kH;', substitution: 'keine Hunde bitte;' },
-  { regex: 'Ki(', substitution: 'x-Kinder im Haus (x=Anzahl)' },
+  { regex: 'Ki\((\d{1,2})\)', substitution: '$1-Kinder im Haus' },
   { regex: 'kPed;', substitution: 'keine Pedelecs' },
   { regex: 'kT;', substitution: 'keine Tiere erwünscht' },
-  { regex: 'KW!;', substitution: 'Kinder Willkommen' },
+  { regex: 'KW!;', substitution: 'Kinder Willkommen;' },
   { regex: 'LF;', substitution: 'Leih-Fahrrad' },
   { regex: 'nF;', substitution: 'nur Frauen;' },
+  { regex: 'NG;', substitution: 'nur Gastgeber;' },
+  { regex: 'nP;', substitution: 'nur Paare;' },
+  { regex: 'NR;', substitution: 'Nichtraucher(in);' },
+  { regex: 'NW:', substitution: 'Nordwestlich von ' },
+  { regex: 'O:', substitution: 'oestlich von ' },
+  { regex: 'OT:', substitution: 'Orts-/Stadt-Teil:' },
+  { regex: 'R;', substitution: 'Raucher(in);' },
+  { regex: 'Rep;', substitution: 'Reperaturmöglichkeit;' },
+  { regex: 'RFW;', substitution: 'Radfernweg;' },
+  { regex: 'RWW;', substitution: 'RadWanderWeg;' },
+  { regex: 'Roll;', substitution: 'Rollstuhlgerechte Whg.;' },
+  { regex: '\(Rus\)', substitution: 'etwas Russisch' },
+  { regex: 'S;', substitution: 'Schlafsack (zwingend);' },
+  { regex: 'SaB;', substitution: 'Schlafplatz auf dem Balkon;' },
+  { regex: 'SO:', substitution: 'SudOestlich von ' },
+  {
+    regex: 'Sp:',
+    substitution: 'Sprachen:'
+  },
+  { regex: 'T:', substitution: 'Telefon(private):' },
+  { regex: 'Tel:', substitution: 'Telefon(private):' },
+  { regex: 'UK;', substitution: 'UnterKunft;' },
+  { regex: 'Geo;', substitution: 'Geokoordinaten im Dezimalgrad;' },
+  { regex: 'Veg;', substitution: 'Vegetarier-Haushalt;' },
+  { regex: 'vgl\.', substitution: 'vergleiche' },
+  { regex: 'W:', substitution: 'Westlich von ' },
+  { regex: 'WG;', substitution: 'Wohngemeinschaft;' },
+  { regex: 'Whg;', substitution: 'Wohnung;' },
+  { regex: 'WM;', substitution: 'Waschmaschine;' },
+  { regex: 'WT;', substitution: 'Wäsche-trockner;' },
+  { regex: 'WZi;', substitution: 'Wohnzimmer;' },
+  { regex: 'www;', substitution: 'Internetgastzugang;' },
+  {
+    regex: '(\d{1,2})ÜN',
+    substitution: 'Maximal möglichen Übernachtungen: $1'
+  },
+  {
+    regex: '(\d{1,2})Z',
+    substitution: 'Zelt(e) für $1-Person(en) vorhanden'
+  },
+  { regex: 'z:', substitution: 'Zusätzliche Person(en):' },
+  { regex: 'ZE;', substitution: 'Zweit-Eintrag;' },
+  { regex: 'Zi;', substitution: 'Zimmer;' },
+  {
+    regex: 'ZOd{2}',
+    substitution: 'Zelten Ohne Anmeldung möglich. Eintreffen jedoch bis $1 Uhr'
+  },
+  { regex: '(\d{2})', substitution: 'Geburtsjahr $1' },
+  { regex: '\\?:', substitution: 'Achtung: Diese Angabe fehlt noch:' },
 ];
-
-const D = {
-  'NG;': 'nur Gastgeber;',
-  'nP;': 'nur Paare;',
-  'NR;': 'Nichtraucher(in);',
-  'NW:': 'Nordwestlich von ',
-  'O:': 'oestlich von ',
-  'OT:': 'Orts-/Stadt-Teil:',
-  'R;': 'Raucher(in);',
-  'Rep;': 'Reperaturmöglichkeit;',
-  'RFW;': 'Radfernweg;',
-  'RWW;': 'RadWanderWeg;',
-  'Roll;': 'Rollstuhlgerechte Whg.;',
-  '(Rus)': 'etwas Russisch',
-  'S;': 'Schlafsack (zwingend);',
-  'SaB;': 'Schlafplatz auf dem Balkon;',
-  'SO:': 'SudOestlich von ',
-  'Sp:': 'Sprachen (gemäss international Länderkennung):',
-  'T:': 'Telefon(private):',
-  'UK;': 'UnterKunft;',
-  'Geo;': 'Geokoordinaten im Dezimalgrad;',
-  'Veg;': 'Vegetarier-Haushalt;',
-  'vgl.': 'vergleiche',
-  'W:': 'Westlich von ',
-  'WG;': 'Wohngemeinschaft;',
-  'Whg;': 'Wohnung;',
-  'WM;': 'Waschmaschine;',
-  'WT;': 'Wäsche-trockner;',
-  'WZi;': 'Wohnzimmer;',
-  'www;': 'Internetgastzugang;',
-  '(\d{1.2})ÜN': 'Maximal möglichen Übernachtungen: $1',
-  '(\d{1,2})Z': 'Zelt(e) für $1-Person(en) vorhanden',
-  'z:': 'Zusätzliche Person(en):',
-  'ZE;': 'Zweit-Eintrag;',
-  'Zi;': 'Zimmer;',
-  'ZO\d{2}': 'Zelten Ohne Anmeldung möglich. Eintreffen jedoch bis $1 Uhr',
-  '(*\d{2})': 'Geburtsjahr $1',
-  '?:': 'Achtung: Diese Angabe fehlt noch:'
-};

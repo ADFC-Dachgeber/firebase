@@ -28,7 +28,7 @@ describe('DachgeberDecoratorService', () => {
 
       expect(service.decorate(dachgeber)).toEqual(
         '<p>Max Mustermann & Hanna Mustermann</p>' +
-        `<p>Hauptstraße 45, 97941 Tauberbischofsheim, Plaetze: Haus:4 + Garten:10, Tel: (01234) 56789, EMail: user83@example.com, Angemeldet: Zusätzliche Person(en):Max & Hanna; Sprache(n): GB,E,F; Kinder willkommen!; Fahrradkeller; keine Hunde bitte; Waschmaschine; Reperaturmöglichkeit (DG-12345)</p>` +
+        `<p>Hauptstraße 45, 97941 Tauberbischofsheim, Plaetze: max. Anzahl Pl. im Haus:4 + max. Anzahl der Plätze im Garten (Zelten):10, Telefon(private): (01234) 56789, EMail: user83@example.com, Angemeldet: Zusätzliche Person(en):Max & Hanna; Sprachen: GB,E,F; Kinder Willkommen; Fahrradkeller; keine Hunde bitte; Waschmaschine; Reperaturmöglichkeit (DG-12345)</p>` +
         'EMail: <a href="mailto:m.mustermann@example.com">m.mustermann@example.com</a> & <a href="mailto:h.mustermann@example.com">h.mustermann@example.com</a>'
       );
     });
