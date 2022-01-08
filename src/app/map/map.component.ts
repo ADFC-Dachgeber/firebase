@@ -127,12 +127,6 @@ export class MapComponent implements AfterContentInit, OnInit {
           fromFeature(features[0].get('features')[0]);
         content.innerHTML =
           this.dachgeberDecoratorService.decorate(dachgeber);
-
-        // content.innerHTML = `
-        //   <p>${dachgeber.get('names')}</p>
-        //   <p>${dachgeber.get('description')}</p>
-        //   <p>${dachgeber.get('emails')}</p>
-        // `;
         overlay.setPosition(coordinate);
         container.removeAttribute('class')
       } else {

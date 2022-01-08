@@ -9,7 +9,6 @@ describe('DachgeberDecoratorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(DachgeberDecoratorService);
-    console.debug(service);
   });
 
   it('should be created', () => {
