@@ -23,6 +23,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   vectorSource: VectorSource<any> = new VectorSource({
     features: [],
   });
+  sidenavOpened: boolean = false;
 
   constructor(
     private readonly dachgeberService: DachgeberService,
@@ -49,6 +50,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   render(): void {
     const sideNav = document.getElementById('map-sidenav')!;
     const pointer = document.getElementById('pointer')!;
+    const sideNavContent = document.getElementById('map-sidenav-content')!;
 
     const clusterSource = new ClusterSource({
       distance: 40,
@@ -114,16 +116,20 @@ export class MapComponent implements OnInit, AfterViewInit {
         map.getFeaturesAtPixel(evt.pixel, { hitTolerance: 10 });
 
       if (features.length > 0) {
-        // const coordinate = evt.coordinate;
-        // pointerOverlay.setPosition(coordinate);
         const dachgeber =
           fromFeature(features[0].get('features')[0]);
-        sideNav.innerHTML =
+        sideNavContent.innerHTML =
           this.dachgeberDecoratorService.decorate(dachgeber);
+        this.sidenavOpened = true;
       } else {
-        sideNav.innerHTML = '';
+        this.sidenavOpened = false;
       }
     });
+  }
+
+  closeSidenav(): void {
+    console.debug('close sidenav');
+    this.sidenavOpened = false;
   }
 }
 
