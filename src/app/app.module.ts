@@ -25,6 +25,8 @@ import { MapModule } from './map/map.module';
 import { NotFoundModule } from './not-found/not-found.module';
 import { environment } from '../environments/environment';
 import { LoginModule } from './login/login.module';
+import { DachgeberModule } from './dachgeber/dachgeber.module';
+import { AccommodationModule } from './accommodation/accommodation.module';
 
 
 @NgModule({
@@ -39,6 +41,8 @@ import { LoginModule } from './login/login.module';
     MapModule,
     NotFoundModule,
     LoginModule,
+    DachgeberModule,
+    AccommodationModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),

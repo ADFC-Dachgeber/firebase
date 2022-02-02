@@ -1,0 +1,81 @@
+<h2>Mein/Unser Dach</h2>
+<form [formGroup]="dgForm" (ngSubmit)="onSubmit(dgForm)">
+    <mat-form-field>
+        <input matInput id="dg-form-work-phone" type="text" formControlName="workPhone" placeholder="Diensttelefon">
+    </mat-form-field>
+    <mat-checkbox id="dg-form-answering-machine" formControlName="answeringMachine">Anrufbeantworter</mat-checkbox>
+    <mat-checkbox id="dg-form-short-notice" formControlName="shortNotice">auch kurzfristige Anmeldung möglich
+    </mat-checkbox>
+    <mat-checkbox id="dg-form-no-notice-required" formControlName="noNoticeRequired">keine Anmeldung erforderlich
+    </mat-checkbox>
+    <mat-form-field>
+        <input matInput id="dg-form-languages" type="text" formControlName="languages" placeholder="Sprachen">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="dg-form-camping-without-notice-until" type="text"
+            formControlName="campingWithoutNoticeUntil"
+            placeholder="Zelten Ohne Anmldg. mgl. Eintreffen jedoch bis XX Uhr ">
+    </mat-form-field>
+
+    <h3>Bedingungen</h3>
+    <mat-checkbox id="dg-form-without-bike" formControlName="withoutBike">auch ohne Fahrrad</mat-checkbox>
+    <mat-checkbox id="dg-form-no-electric-bike" formControlName="noElectricBikes">keine Pedelecs</mat-checkbox>
+    <mat-checkbox id="dg-form-sleeping-bag-required" formControlName="sleepingBagRequired">Schlafsack erforderlich
+    </mat-checkbox>
+    <mat-checkbox id="dg-form-camping-mat-required" formControlName="campingMatRequired">Isomatte erforderlich
+    </mat-checkbox>
+    <mat-checkbox id="dg-form-without-hpv" formControlName="hpv">Human Powered Verband OK</mat-checkbox>
+    <mat-checkbox id="dg-form-dogs-welcome" formControlName="dogsWelcome">Hunde Willkommen</mat-checkbox>
+    <mat-checkbox id="dg-form-no-dogs" formControlName="noDogs">keine Hunde bitte</mat-checkbox>
+    <mat-checkbox id="dg-form-no-pets" formControlName="noPets">keine Tiere erwünscht</mat-checkbox>
+    <mat-checkbox id="dg-form-children-welcome" formControlName="childrenWelcome">Kinder Willkommen</mat-checkbox>
+    <mat-checkbox id="dg-form-women-only" formControlName="womenOnly">nur Frauen</mat-checkbox>
+    <mat-checkbox id="dg-form-host-only" formControlName="hostOnly">nur Gastgeber</mat-checkbox>
+    <mat-checkbox id="dg-form-couples-only" formControlName="couplesOnly">nur Paare</mat-checkbox>
+    <mat-checkbox id="dg-form-smoke-free" formControlName="smokeFree">Nichtraucher(in)</mat-checkbox>
+    <mat-form-field>
+        <input matInput id="dg-form-n-nights" type="number" formControlName="nNights"
+            placeholder="Zahl (x) der maximal möglichen Übernachtungen">
+    </mat-form-field>
+
+    <h3>Sonst</h3>
+    <mat-checkbox id="dg-form-repair-tools" formControlName="repairTools">Reperaturmöglichkeit </mat-checkbox>
+    <mat-checkbox id="dg-form-garage" formControlName="garage">Fahrradkeller</mat-checkbox>
+    <mat-checkbox id="dg-form-bike-rent" formControlName="bikeRent">Leih-Fahrrad</mat-checkbox>
+    <mat-checkbox id="dg-form-washing-machine" formControlName="washingMachine">Waschmachine</mat-checkbox>
+    <mat-checkbox id="dg-form-dryer" formControlName="dryer">Wäsche-trockner</mat-checkbox>
+    <mat-checkbox id="dg-form-internet" formControlName="internet">Internetzugang</mat-checkbox>
+    <mat-form-field>
+        <input matInput id="dg-form-tent-for-n-persons" type="number" formControlName="tentForNPersons"
+            placeholder="Zelt(e) für x-Person(en) vorhanden">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="dg-form-additional-persons" type="text" formControlName="additionalPersons"
+            placeholder="Zusätzliche Person(en)">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="dg-form-second-listing" type="text" formControlName="secondListing"
+            placeholder="Zweit-Eintrag (kostenfrei!)">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="dg-form-year-of-birth" type="number" formControlName="yearOfBirth"
+            placeholder="Geburtsjahr, z.B. 1990">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="dg-form-missing-info" type="text" formControlName="missingInfo"
+            placeholder="Achtung: Diese Angabe fehlt noch">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="dg-form-coodinate-in-decimal" type="number" formControlName="coordinateInDecimal"
+            placeholder="Koordinaten in Dezimalgrad">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput id="dg-form-additional-info" type="text" formControlName="additionalInfo"
+            placeholder="Zusätzliche Informationen">
+    </mat-form-field>
+
+    <p>
+        <button mat-stroked-button id="dg-form-submit-button" [disabled]="!dgForm.valid">Speichern</button>
+    </p>
+    <p>Form is valid: {{dgForm.valid}}</p>
+</form>

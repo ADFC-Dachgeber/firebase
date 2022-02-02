@@ -3,10 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { canActivate, customClaims } from '@angular/fire/auth-guard';
 import { map, pipe } from 'rxjs';
 
-import { PATH_LOGIN, PATH_MAP, PATH_NOT_FOUND } from './constants';
+import { PATH_ACCOMMODATION, PATH_LOGIN, PATH_MAP, PATH_NOT_FOUND } from './constants';
 import { LoginComponent } from './login/login.component';
 import { MapComponent } from './map/map.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { EditAccommodationComponent } from './accommodation/edit-accommodation/edit-accommodation.component';
 
 const approvedOnly = () => pipe(
   customClaims,
@@ -26,6 +27,11 @@ export const routes: Routes = [
   { path: PATH_LOGIN, component: LoginComponent },
   { path: '', redirectTo: PATH_MAP, pathMatch: 'full' },
   { path: PATH_NOT_FOUND, component: NotFoundComponent },
+  {
+    path: PATH_ACCOMMODATION, children: [
+      { path: ':id', component: EditAccommodationComponent }
+    ]
+  },
   { path: '**', redirectTo: PATH_NOT_FOUND },
 ];
 

@@ -128,7 +128,6 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   closeSidenav(): void {
-    console.debug('close sidenav');
     this.sidenavOpened = false;
   }
 }
