@@ -1,5 +1,5 @@
 <mat-drawer-container id="sidenav-container">
-    <mat-drawer id="map-sidenav" mode="over" [opened]="sidenavOpened">
+    <mat-drawer id="map-sidenav" mode="over" disableClose="true" [opened]="sidenavOpened">
         <button mat-button id="sidenav-close-button" (click)="closeSidenav()"><mat-icon>close</mat-icon></button>
         <div id="map-sidenav-content"></div>
     </mat-drawer>
