@@ -3,21 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { provideFunctions, getFunctions } from '@angular/fire/functions';
+import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
+import { provideFirestore, getFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
+import { provideFunctions, getFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 import { providePerformance, getPerformance } from '@angular/fire/performance';
 import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-config';
-import { provideStorage, getStorage } from '@angular/fire/storage';
+import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
-import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
-// import { USE_EMULATOR as USE_DATABASE_EMULATOR } from '@angular/fire/compat/database';
-// import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/compat/firestore';
-// import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/compat/functions';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,7 +24,13 @@ import { environment } from '../environments/environment';
 import { LoginModule } from './login/login.module';
 import { DachgeberModule } from './dachgeber/dachgeber.module';
 import { AccommodationModule } from './accommodation/accommodation.module';
+import { enableMultiTabIndexedDbPersistence } from 'firebase/firestore';
 
+let resolvePersistenceEnabled: (enabled: boolean) => void;
+
+export const persistenceEnabled = new Promise<boolean>(resolve => {
+  resolvePersistenceEnabled = resolve;
+});
 
 @NgModule({
   declarations: [
@@ -45,13 +48,42 @@ import { AccommodationModule } from './accommodation/accommodation.module';
     AccommodationModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    provideAuth(() => {
+      const auth = getAuth();
+      if (environment.useEmulators) {
+        connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+      }
+      return auth;
+    }),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      if (environment.useEmulators) {
+        connectFirestoreEmulator(firestore, 'localhost', 8080);
+      }
+      enableMultiTabIndexedDbPersistence(firestore).then(
+        () => resolvePersistenceEnabled(true),
+        () => resolvePersistenceEnabled(false)
+      );
+      return firestore;
+    }),
     provideFunctions(() => getFunctions()),
     provideMessaging(() => getMessaging()),
     providePerformance(() => getPerformance()),
     provideRemoteConfig(() => getRemoteConfig()),
-    provideStorage(() => getStorage()),
+    provideStorage(() => {
+      const storage = getStorage();
+      if (environment.useEmulators) {
+          connectStorageEmulator(storage, 'localhost', 9199);
+      }
+      return storage;
+    }),
+    provideFunctions(() => {
+      const functions = getFunctions();
+      if (environment.useEmulators) {
+          connectFunctionsEmulator(functions, 'localhost', 5001);
+      }
+      return functions;
+    }),
     BrowserAnimationsModule,
   ],
   providers: [
@@ -60,11 +92,6 @@ import { AccommodationModule } from './accommodation/accommodation.module';
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 3000 }
-    },
-    {
-      provide: USE_AUTH_EMULATOR,
-      useValue: environment.useEmulators ?
-        ['http://localhost:9099'] : undefined
     },
   ],
   bootstrap: [AppComponent]
