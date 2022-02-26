@@ -1,6 +1,6 @@
 import { Coordinate } from "ol/coordinate";
 
-export interface accommodation {
+export interface Accommodation {
     readonly id: string;
 
     readonly location: {

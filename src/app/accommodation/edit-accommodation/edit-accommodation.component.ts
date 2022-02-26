@@ -105,13 +105,20 @@ export class EditAccommodationComponent implements OnInit {
     ]),
   });
 
-  constructor(private readonly route: ActivatedRoute) { }
+  constructor(
+    private readonly route: ActivatedRoute,
+  ) { }
 
   ngOnInit() {
     this.id$ = this.route.params.pipe(
       map(({ id }) => id),
     );
+    this.id$
+      .pipe()
+      .subscribe(console.debug);
   }
 
-  onSubmit(dgForm: FormGroup) {}
+  onSubmit(dgForm: FormGroup) {
+    console.debug(dgForm);
+  }
 }
